@@ -1,4 +1,5 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404, redirect
+from django.db.models import Q
 from contato.models import Contato
 
 # Create your views here.
@@ -7,7 +8,8 @@ def index(request):
     contacts = Contato.objects.filter(show=True).order_by('-id')[:20]
     
     context = {
-        'contacts':contacts
+        'contacts':contacts,
+        'site_title': 'Contato -'
     }
     
     return render(
@@ -16,12 +18,43 @@ def index(request):
         context
     )
 
+def search(request):
+    search_value = request.GET.get('q', '').strip()
+
+    if search_value == '':
+        return redirect('contact:index')
+    
+    contacts = Contato.objects\
+        .filter(show=True)\
+        .filter(
+            Q(first_name__icontains = search_value)|
+            Q(last_name__icontains = search_value)|
+            Q(phone__icontains = search_value)|
+            Q(email__icontains = search_value)
+        )\
+        .order_by('-id')
+    
+    context = {
+        'contacts':contacts,
+        'site_title': 'Search -'
+    }
+    
+    return render(
+        request,
+        'contato/index.html',
+        context
+    )
+
+
 def contact(request, contact_id):
     #single_contact = Contato.objects.get(pk=contact_id)
     single_contact = get_object_or_404(Contato, pk=contact_id, show=True)
+
+    site_title = f'{single_contact.first_name} {single_contact.last_name} - '
     
     context = {
         'contact':single_contact,
+        'site_title': site_title
     }
     
     return render(
