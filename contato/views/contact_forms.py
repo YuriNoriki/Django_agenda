@@ -1,9 +1,11 @@
-from django.shortcuts import render,get_object_or_404, redirect
-from django.db.models import Q
-from contato.models import Contato
 from django.core.paginator import Paginator
+from django.db.models import Q
+from django.shortcuts import render,get_object_or_404, redirect
+
+from contato.models import Contato
 
 def create(request):
+    
     
     context = {
        
@@ -11,6 +13,6 @@ def create(request):
     
     return render(
         request,
-        'create/index.html',
+        'contato/create.html',
         context
     )
