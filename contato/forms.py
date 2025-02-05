@@ -23,6 +23,7 @@ class ContactForms(forms.ModelForm):
         model = models.Contato
         fields = (
             'first_name', 'last_name','phone',
+            'email', 'description','category',
         )
 
     def clean(self):
