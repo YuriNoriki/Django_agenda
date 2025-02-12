@@ -12,6 +12,7 @@ urlpatterns = [
     #contato(CRUD)
     path('contact/<int:contact_id>/', views.contact, name='contact'),
     path('contact/create/', views.create, name='create'),
+    path('contact/<int:contact_id>/update/', views.update, name='update'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
